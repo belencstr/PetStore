@@ -1,22 +1,27 @@
 const jwt = require('jsonwebtoken');
 
-// Middleware para proteger rutas
-const protect = (req, res, next) => {
-    const authHeader = req.headers.authorization;
+exports.protect = (req, res, next) => {
+    let token;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ error: 'No autorizado, no se encontró el token' });
+    // Verificar si el token está en los encabezados
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        try {
+            // Obtener el token
+            token = req.headers.authorization.split(' ')[1];
+
+            // Verificar y decodificar el token
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+            // Agregar el id del usuario al request para que esté disponible en las rutas
+            req.user = decoded;
+            next(); // Continuar con la ejecución de la ruta
+        } catch (error) {
+            res.status(401).json({ message: 'No autorizado, token inválido' });
+        }
     }
 
-    const token = authHeader.split(' ')[1]; // Extraer el token
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verificar el token
-        req.user = decoded; // Agregar datos del usuario al request
-        next(); // Continuar al controlador
-    } catch (err) {
-        return res.status(401).json({ error: 'No autorizado, token inválido' });
+    // Si no se envió el token
+    if (!token) {
+        res.status(401).json({ message: 'No autorizado, falta el token' });
     }
 };
-
-module.exports = { protect };
