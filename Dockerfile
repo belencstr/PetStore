@@ -1,8 +1,8 @@
 # Imagen base
-FROM node:16
+FROM node:18
 
 # Crear directorio de trabajo
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copiar los archivos de dependencia
 COPY package*.json ./
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Comando para iniciar la app
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
