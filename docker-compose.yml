@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_URI=mongodb://mongo:27017
+      - DB_NAME=petstoreDB
+      - JWT_SECRET=clave_super_secreta_123
+      - JWT_EXPIRES_IN=1h
+    depends_on:
+      - mongo
+    volumes:
+      - .:/usr/src/app
+    command: npm start
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
