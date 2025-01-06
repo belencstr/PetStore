@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { getAllUsers, getUserById, loginUser, registerUser, updateUserProfile } = require('../controllers/usersController');
-const { protect } = require('../middlewares/authMiddleware');
+const { getAllUsers, getUserById, loginUser, registerUser, updateUserProfile, deleteUser } = require('../controllers/usersController');
+const { protect, authorize } = require('../middlewares/authMiddleware'); // Importar authorize
 
 // Rutas protegidas
 router.get('/', protect, getAllUsers);
 router.get('/:id', protect, getUserById);
 router.put('/profile', protect, updateUserProfile);
+router.delete('/:id', protect, authorize('admin'), deleteUser); // Añadir ruta para eliminar usuario
 
 // Ruta para registrar usuario
 router.post('/register', registerUser);
@@ -113,6 +114,27 @@ module.exports = router;
  *       200:
  *         description: Perfil actualizado con éxito
  *       401:
+ *         description: No autorizado
+ */
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Eliminar un usuario por ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID del usuario
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado con éxito
+ *       404:
+ *         description: Usuario no encontrado
+ *       403:
  *         description: No autorizado
  */
 

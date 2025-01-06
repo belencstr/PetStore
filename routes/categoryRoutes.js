@@ -4,13 +4,30 @@ const categoryController = require('../controllers/categoryController');
 const { protect } = require('../middlewares/authMiddleware');
 
 // Rutas para categorías
-router.get('/categories', categoryController.getAllCategories);  // Obtener todas las categorías
-router.get('/categories/:id', categoryController.getCategoryById);  // Obtener una categoría por ID
+router.get('/', (req, res, next) => {
+    console.log('GET /categories');
+    next();
+}, categoryController.getAllCategories);  // Obtener todas las categorías
 
-//router.post('/categories', protect, categoryController.createCategory);  // Crear categoría solo si está autenticado
-router.post('/categories', categoryController.createCategory);
-router.put('/categories/:id', protect, categoryController.updateCategory);  // Actualizar categoría solo si está autenticado
-router.delete('/categories/:id', protect, categoryController.deleteCategory);  // Eliminar categoría solo si está autenticado
+router.get('/:id', (req, res, next) => {
+    console.log(`GET /categories/${req.params.id}`);
+    next();
+}, categoryController.getCategoryById);  // Obtener una categoría por ID
+
+router.post('/', (req, res, next) => {
+    console.log('POST /categories', req.body);
+    next();
+}, categoryController.createCategory);  // Crear categoría
+
+router.put('/:id', protect, (req, res, next) => {
+    console.log(`PUT /categories/${req.params.id}`, req.body);
+    next();
+}, categoryController.updateCategory);  // Actualizar categoría solo si está autenticado
+
+router.delete('/:id', protect, (req, res, next) => {
+    console.log(`DELETE /categories/${req.params.id}`);
+    next();
+}, categoryController.deleteCategory);  // Eliminar categoría solo si está autenticado
 
 module.exports = router;
 

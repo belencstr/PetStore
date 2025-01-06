@@ -4,10 +4,10 @@ const reviewController = require('../controllers/reviewController');
 const { protect } = require('../middlewares/authMiddleware');
 
 // Rutas para reseñas
-router.get('/reviews/:productId', reviewController.getReviewsByProduct);  // Obtener reseñas de un producto
-router.post('/reviews', protect, reviewController.createReview);  // Crear una reseña
-router.put('/reviews/:id', protect, reviewController.updateReview);  // Actualizar reseña
-router.delete('/reviews/:id', protect, reviewController.deleteReview);  // Eliminar reseña
+router.get('/:productId', reviewController.getReviewsByProduct);  // Obtener reseñas de un producto
+router.post('/', protect, reviewController.createReview);  // Crear una reseña
+router.put('/:id', protect, reviewController.updateReview);  // Actualizar reseña
+router.delete('/:id', protect, reviewController.deleteReview);  // Eliminar reseña
 
 module.exports = router;
 

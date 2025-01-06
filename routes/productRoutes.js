@@ -4,12 +4,12 @@ const productController = require('../controllers/productController');
 const { protect } = require('../middlewares/authMiddleware');
 
 // Rutas para productos
-router.get('/products', productController.getAllProducts);  // Obtener todos los productos
-router.get('/products/category/:categoryName', productController.getProductsByCategory);  // Obtener productos por categoría
+router.get('/', productController.getAllProducts);  // Obtener todos los productos
+router.get('/category/:categoryName', productController.getProductsByCategory);  // Obtener productos por categoría
 
-router.post('/products', protect, productController.createProduct); // Crear producto solo si está autenticado
-router.put('/products/:id', protect, productController.updateProduct); // Actualizar producto solo si está autenticado
-router.delete('/products/:id', protect, productController.deleteProduct); // Eliminar producto solo si está autenticado
+router.post('/', protect, productController.createProduct); // Crear producto solo si está autenticado
+router.put('/:id', protect, productController.updateProduct); // Actualizar producto solo si está autenticado
+router.delete('/:id', protect, productController.deleteProduct); // Eliminar producto solo si está autenticado
 
 module.exports = router;
 

@@ -4,11 +4,11 @@ const orderController = require('../controllers/orderController');
 const { protect } = require('../middlewares/authMiddleware');
 
 // Rutas para pedidos
-router.get('/orders', protect, orderController.getAllOrders);  // Obtener todos los pedidos del usuario
-router.get('/orders/:id', protect, orderController.getOrderById);  // Obtener un pedido por ID
-router.post('/orders', protect, orderController.createOrder);  // Crear un nuevo pedido
-router.put('/orders/:id', protect, orderController.updateOrder);  // Actualizar un pedido
-router.delete('/orders/:id', protect, orderController.deleteOrder);  // Eliminar un pedido
+router.get('/', protect, orderController.getAllOrders);  // Obtener todos los pedidos del usuario
+router.get('/:id', protect, orderController.getOrderById);  // Obtener un pedido por ID
+router.post('/', protect, orderController.createOrder);  // Crear un nuevo pedido
+router.put('/:id', protect, orderController.updateOrder);  // Actualizar un pedido
+router.delete('/:id', protect, orderController.deleteOrder);  // Eliminar un pedido
 
 module.exports = router;
 

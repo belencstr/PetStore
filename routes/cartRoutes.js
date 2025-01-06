@@ -4,10 +4,10 @@ const cartController = require('../controllers/cartController');
 const { protect } = require('../middlewares/authMiddleware');
 
 // Rutas para carrito
-router.get('/cart', protect, cartController.getCart);  // Obtener el carrito del usuario
-router.post('/cart', protect, cartController.addToCart);  // Agregar un producto al carrito
-router.put('/cart', protect, cartController.updateCart);  // Actualizar carrito
-router.delete('/cart', protect, cartController.clearCart);  // Vaciar carrito
+router.get('/', protect, cartController.getCart);  // Obtener el carrito del usuario
+router.post('/', protect, cartController.addToCart);  // Agregar un producto al carrito
+router.put('/', protect, cartController.updateCart);  // Actualizar carrito
+router.delete('/', protect, cartController.clearCart);  // Vaciar carrito
 
 module.exports = router;
 
