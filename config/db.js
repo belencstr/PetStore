@@ -1,20 +1,16 @@
 // config/db.js
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 
-const uri = process.env.DB_URI; // Usa la variable de entorno
-const dbName = process.env.DB_NAME; // Nombre de la base de datos
-
-const client = new MongoClient(uri);
-
-async function connectDB() {
+const connectDB = async () => {
     try {
-        await client.connect();
-        console.log(`Conectado a la base de datos: ${dbName}`);
-        return client.db(dbName);
+        const conn = await mongoose.connect(process.env.DB_URI, {
+            dbName: process.env.DB_NAME
+        });
+        console.log(`MongoDB conectado: ${conn.connection.host}`);
     } catch (error) {
-        console.error("Error de conexión:", error);
-        process.exit(1); // Termina el proceso si no se puede conectar
+        console.error(`Error: ${error.message}`);
+        process.exit(1);
     }
-}
+};
 
 module.exports = connectDB;
