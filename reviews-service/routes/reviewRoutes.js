@@ -5,6 +5,7 @@ const { protect } = require('../middlewares/authMiddleware');
 
 // Rutas para reseñas
 router.get('/:productId', reviewController.getReviewsByProduct);  // Obtener reseñas de un producto
+router.get('/summary/:productId', reviewController.getReviewSummaryByProduct);  // Obtener resumen de reseñas de un producto
 router.post('/', protect, reviewController.createReview);  // Crear una reseña
 router.put('/:id', protect, reviewController.updateReview);  // Actualizar reseña
 router.delete('/:id', protect, reviewController.deleteReview);  // Eliminar reseña
@@ -62,4 +63,8 @@ module.exports = router;
  *         description: Reseña creada con éxito
  *       400:
  *         description: Datos inválidos
+ *      404:
+ *        description: Producto no encontrado
+ *     500:
+ *      description: Error al crear la reseña
  */

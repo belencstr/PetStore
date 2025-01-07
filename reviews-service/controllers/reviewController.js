@@ -1,5 +1,5 @@
 const Review = require('../models/reviewModel');
-const Product = require('../models/productModel');
+const axios = require('axios');
 
 // Obtener reseñas de un producto
 exports.getReviewsByProduct = async (req, res) => {
@@ -15,7 +15,10 @@ exports.getReviewsByProduct = async (req, res) => {
 exports.createReview = async (req, res) => {
     try {
         const { productId, rating, comment } = req.body;
-        const product = await Product.findById(productId);
+        
+        // Verificar si el producto existe llamando al servicio de productos
+        const productResponse = await axios.get(`http://products:3002/api/products/${productId}`);
+        const product = productResponse.data;
 
         if (!product) {
             return res.status(404).json({ message: 'Producto no encontrado' });
@@ -32,6 +35,19 @@ exports.createReview = async (req, res) => {
         res.status(201).json({ message: 'Reseña creada con éxito', review });
     } catch (error) {
         res.status(500).json({ message: 'Error al crear la reseña', error });
+    }
+};
+
+// Obtener resumen de reseñas de un producto
+exports.getReviewSummaryByProduct = async (req, res) => {
+    try {
+        const reviews = await Review.find({ product: req.params.productId });
+        const totalReviews = reviews.length;
+        const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / totalReviews;
+
+        res.status(200).json({ totalReviews, averageRating });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener el resumen de reseñas', error });
     }
 };
 

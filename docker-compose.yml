@@ -1,28 +1,46 @@
 version: '3.8'
 services:
-  app:
-    build: .
+  users:
+    build: ./users-service
     ports:
-      - "3000:3000"
+      - "3001:3001"
     environment:
       - DB_URI=mongodb://mongo:27017
-      - DB_NAME=petstoreDB
-      - JWT_SECRET=clave_super_secreta_123
-      - JWT_EXPIRES_IN=1h
-    depends_on:
-      - mongo
-    volumes:
-      - .:/usr/src/app
-    command: npm start
-
+  products:
+    build: ./products-service
+    ports:
+      - "3002:3002"
+    environment:
+      - DB_URI=mongodb://mongo:27017
+  orders:
+    build: ./orders-service
+    ports:
+      - "3003:3003"
+    environment:
+      - DB_URI=mongodb://mongo:27017
+  reviews:
+    build: ./reviews-service
+    ports:
+      - "3004:3004"
+    environment:
+      - DB_URI=mongodb://mongo:27017
+  categories:
+    build: ./categories-service
+    ports:
+      - "3005:3005"
+    environment:
+      - DB_URI=mongodb://mongo:27017
+  cart:
+    build: ./cart-service
+    ports:
+      - "3006:3006"
+    environment:
+      - DB_URI=mongodb://mongo:27017
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
   mongo:
     image: mongo
-    container_name: mongo
-    restart: always
     ports:
       - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
-volumes:
-  mongo_data:

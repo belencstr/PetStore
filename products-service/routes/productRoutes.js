@@ -3,9 +3,14 @@ const router = express.Router();
 const productController = require('../controllers/productController');
 const { protect } = require('../middlewares/authMiddleware');
 
+// Asegúrate de que getProductWithReviews esté correctamente importado
+const { getProductWithReviews } = productController;
+
+
 // Rutas para productos
 router.get('/', productController.getAllProducts);  // Obtener todos los productos
 router.get('/category/:categoryName', productController.getProductsByCategory);  // Obtener productos por categoría
+router.get('/:id', getProductWithReviews); // Obtener un producto con sus reseñas y resumen de reseñas
 
 router.post('/', protect, productController.createProduct); // Crear producto solo si está autenticado
 router.put('/:id', protect, productController.updateProduct); // Actualizar producto solo si está autenticado
@@ -88,4 +93,4 @@ module.exports = router;
  *                     type: number
  *       404:
  *         description: Categoría no encontrada
- */
+    */

@@ -1,5 +1,5 @@
 const Cart = require('../models/cartModel');
-const Product = require('../models/productModel');
+const axios = require('axios');
 
 // Obtener el carrito del usuario
 exports.getCart = async (req, res) => {
@@ -18,10 +18,13 @@ exports.getCart = async (req, res) => {
 exports.addToCart = async (req, res) => {
     try {
         const { productId, quantity } = req.body;
-        const product = await Product.findById(productId);
 
-        if (!product) {
-            return res.status(404).json({ message: 'Producto no encontrado' });
+        // Verificar disponibilidad del producto con el servicio de Productos
+        const productResponse = await axios.get(`http://products:3002/api/products/${productId}`);
+        const product = productResponse.data;
+
+        if (!product || product.stock < quantity) {
+            return res.status(404).json({ message: 'Producto no disponible' });
         }
 
         let cart = await Cart.findOne({ user: req.user.id });
