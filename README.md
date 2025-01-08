@@ -95,27 +95,3 @@ El proyecto PetStore es una aplicación web que permite a los usuarios explorar 
     docker ps
     ```
 2. Abre tu navegador y navega a `http://localhost:3000` para ver la aplicación en funcionamiento.
-
-## Contribución
-1. Haz un fork del repositorio.
-2. Crea una nueva rama para tu funcionalidad o corrección de errores:
-    ```bash
-    git checkout -b nombre-de-tu-rama
-    ```
-3. Realiza tus cambios y haz un commit:
-    ```bash
-    git commit -m "Descripción de tus cambios"
-    ```
-4. Sube tus cambios a tu repositorio fork:
-    ```bash
-    git push origin nombre-de-tu-rama
-    ```
-5. Abre un Pull Request en el repositorio original.
-
-## Licencia
-Este proyecto está licenciado bajo la Licencia MIT.
-
-
-
-
-
