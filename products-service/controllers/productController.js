@@ -13,11 +13,19 @@ const getProductWithReviews = async (req, res) => {
         }
 
         // Llamar al servicio de reviews para obtener las reseñas del producto
-        const reviewsResponse = await axios.get(`http://reviews:3004/api/reviews/${productId}`);
+        const reviewsResponse = await axios.get(`http://reviews:3004/api/reviews/${productId}`, {
+            headers: {
+                Authorization: req.headers.authorization
+            }
+        });
         const reviews = reviewsResponse.data;
 
         // Llamar al servicio de reviews para obtener el resumen de reseñas del producto
-        const reviewSummaryResponse = await axios.get(`http://reviews:3004/api/reviews/summary/${productId}`);
+        const reviewSummaryResponse = await axios.get(`http://reviews:3004/api/reviews/summary/${productId}`, {
+            headers: {
+                Authorization: req.headers.authorization
+            }
+        });
         const reviewSummary = reviewSummaryResponse.data;
 
         // Responder con el producto, sus reseñas y el resumen de reseñas
@@ -28,9 +36,13 @@ const getProductWithReviews = async (req, res) => {
     }
 };
 
-async function getCategoryById(categoryId) {
+async function getCategoryById(categoryId, token) {
     try {
-        const response = await axios.get(`http://categories:3001/api/categories/${categoryId}`);
+        const response = await axios.get(`http://categories:3005/api/categories/${categoryId}`, {
+            headers: {
+                Authorization: token
+            }
+        });
         return response.data;
     } catch (error) {
         throw new Error('Error al obtener la categoría: ' + error.message);
@@ -63,12 +75,11 @@ module.exports = {
     createProduct: async (req, res) => {
         try {
             const { name, description, price, category, stock } = req.body;
+            const token = req.headers.authorization;
 
             // Verificar si la categoría existe llamando al servicio de categorías
-            const categoryResponse = await axios.get(`http://categories:3003/api/categories/${category}`);
-            const categoryExists = categoryResponse.data;
-
-            if (!categoryExists) {
+            const categoryResponse = await getCategoryById(category, token);
+            if (!categoryResponse) {
                 return res.status(404).json({ message: 'Categoría no encontrada' });
             }
 
@@ -127,7 +138,7 @@ module.exports = {
             }
 
             // Verificar si la categoría existe llamando al servicio de categorías
-            const categoryResponse = await axios.get(`http://categories:3003/api/categories/${category}`);
+            const categoryResponse = await axios.get(`http://categories:3005/api/categories/${category}`);
             const categoryExists = categoryResponse.data;
 
             if (!categoryExists) {

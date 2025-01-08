@@ -17,8 +17,19 @@ exports.createReview = async (req, res) => {
         const { productId, rating, comment } = req.body;
         
         // Verificar si el producto existe llamando al servicio de productos
-        const productResponse = await axios.get(`http://products:3002/api/products/${productId}`);
-        const product = productResponse.data;
+        let product;
+        try {
+            const productResponse = await axios.get(`http://products:3002/api/products/${productId}`);
+            product = productResponse.data;
+        } catch (error) {
+            if (error.response) {
+                return res.status(error.response.status).json({ message: 'Error al verificar el producto', error: error.response.data });
+            } else if (error.request) {
+                return res.status(500).json({ message: 'No se recibió respuesta del servicio de productos', error: error.message });
+            } else {
+                return res.status(500).json({ message: 'Error al realizar la solicitud al servicio de productos', error: error.message });
+            }
+        }
 
         if (!product) {
             return res.status(404).json({ message: 'Producto no encontrado' });
@@ -34,7 +45,7 @@ exports.createReview = async (req, res) => {
         await review.save();
         res.status(201).json({ message: 'Reseña creada con éxito', review });
     } catch (error) {
-        res.status(500).json({ message: 'Error al crear la reseña', error });
+        res.status(500).json({ message: 'Error al crear la reseña', error: error.message });
     }
 };
 

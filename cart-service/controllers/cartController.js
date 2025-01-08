@@ -36,6 +36,7 @@ exports.addToCart = async (req, res) => {
         const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
         if (itemIndex > -1) {
             cart.items[itemIndex].quantity += quantity;
+            cart.items[itemIndex].price = product.price; // Actualizar el precio del producto
         } else {
             cart.items.push({ product: productId, quantity, price: product.price });
         }
